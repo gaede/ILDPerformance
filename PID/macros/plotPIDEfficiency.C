@@ -15,6 +15,7 @@ void make_plots(const char* filename, const char* pidName, int pdgCode, const TS
 /// plot the PID efficiency and fake rate for a given particle type for various PID algorithms as function of momentum and polar angle
 void plotPIDEfficiency(const char* filename) {
 
+
   TString pdfFile = getPathPrefix( filename ) ;
   pdfFile += "PID_efficiencies_all.pdf" ;
 
@@ -452,7 +453,15 @@ void make_plots(const char* filename, const char* pidName, int pdgCode, const TS
 
    c2->Print( fName );
 
+   if( rootFile  ){
 
+     TString canvName("PID_efficiency_") ;
+     canvName += pidName ;
+     canvName += "_pdg";
+     canvName +=  pdgCode ;
+     
+     rootFile->WriteTObject( c2 , canvName ) ;
+   }
 
    // cleanup...
 

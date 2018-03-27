@@ -13,7 +13,7 @@ void getPDGHistos (TH1F **hist, TTree *tree, int &pdg, int &itruecut) ;
 
 
 /// Create PID plots for four different algorithms in directory where ROOT file is found
-void plotPIDs(const char* _filename) {
+void plotPIDs(const char* _filename, TFile* rootFile=0) {
 
   gROOT->SetStyle("ildStyle");
   ildStyle->SetOptTitle(1);
@@ -37,9 +37,13 @@ void plotPIDs(const char* _filename) {
   ildStyle->SetMarkerStyle(20);
   ildStyle->SetMarkerSize(0.625);
 
-  TFile *treefile = new TFile(_filename);
+  TFile *treefile = new TFile(_filename );
   TTree *tree = (TTree*) treefile->Get("hermTree");
     
+/*
+   TFile *rootFile = new TFile( "myPIDplots.root"  , "recreate" );
+*/
+
   // cut:PID_output_n1n1hh2.root
   // 1: p > 1 GeV
   // 8: 1 GeV < p < 10 GeV
@@ -93,7 +97,12 @@ void plotPIDs(const char* _filename) {
     // cpdg[ipdg]->Print(TString(outfile+".ps"));
     cpdg[ipdg]->Print(TString(outfile+".pdf"));
 
+
+    if( rootFile  )
+      rootFile->WriteTObject( cpdg[ipdg] ) ;
+
   }
+
   
   return;
   
@@ -227,6 +236,9 @@ void getPDGHistos (TH1F **hist, TTree *tree, int &pdg, int &itruecut) {
     hist[i]->SetAxisRange(0, ymax, "Y");
   }
   
+
+
+
   return;
 
 }
